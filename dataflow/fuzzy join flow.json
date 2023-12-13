@@ -5,10 +5,6 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "orders_table",
-						"type": "DatasetReference"
-					},
 					"name": "orders",
 					"description": "left hand side table"
 				},
@@ -17,7 +13,7 @@
 						"referenceName": "assets_table",
 						"type": "DatasetReference"
 					},
-					"name": "RHS",
+					"name": "assets",
 					"description": "right hand side dataset"
 				}
 			],
@@ -36,12 +32,7 @@
 				}
 			],
 			"scriptLines": [
-				"source(output(",
-				"          id as string,",
-				"          orderId as string,",
-				"          orderItem as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false) ~> orders",
 				"source(output(",
 				"          id as string,",
@@ -52,8 +43,8 @@
 				"          hierarchyPath as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> RHS",
-				"orders, RHS join(fuzzyCompare(orderItem, assetId, 80.00),",
+				"     validateSchema: false) ~> assets",
+				"orders, assets join(fuzzyCompare(orderItem, assetId, 80.00),",
 				"     joinType:'left',",
 				"     matchType:'fuzzy',",
 				"     ignoreSpaces: false,",
