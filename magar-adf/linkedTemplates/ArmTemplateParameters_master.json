@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "magar-adf"
+		},
+		"magar_linked_service_servicePrincipalCredential": {
+			"value": ""
+		},
+		"magar_linked_service_2_servicePrincipalCredential": {
+			"value": ""
+		},
+		"magar_linked_service_properties_typeProperties_tenant": {
+			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"magar_linked_service_properties_typeProperties_servicePrincipalId": {
+			"value": "93caa577-dd6f-42b2-be63-04c899560742"
+		},
+		"magar_linked_service_2_properties_typeProperties_tenant": {
+			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"magar_linked_service_2_properties_typeProperties_servicePrincipalId": {
+			"value": "93caa577-dd6f-42b2-be63-04c899560742"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

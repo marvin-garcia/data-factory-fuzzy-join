@@ -1,0 +1,84 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "magar-adf"
+		},
+		"magar_linked_service_servicePrincipalCredential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalCredential' of 'magar_linked_service'"
+		},
+		"magar_linked_service_2_servicePrincipalCredential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalCredential' of 'magar_linked_service_2'"
+		},
+		"magar_linked_service_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"magar_linked_service_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "93caa577-dd6f-42b2-be63-04c899560742"
+		},
+		"magar_linked_service_2_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"magar_linked_service_2_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "93caa577-dd6f-42b2-be63-04c899560742"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "magar-adf_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"magar_linked_service_servicePrincipalCredential": {
+						"value": "[parameters('magar_linked_service_servicePrincipalCredential')]"
+					},
+					"magar_linked_service_2_servicePrincipalCredential": {
+						"value": "[parameters('magar_linked_service_2_servicePrincipalCredential')]"
+					},
+					"magar_linked_service_properties_typeProperties_tenant": {
+						"value": "[parameters('magar_linked_service_properties_typeProperties_tenant')]"
+					},
+					"magar_linked_service_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('magar_linked_service_properties_typeProperties_servicePrincipalId')]"
+					},
+					"magar_linked_service_2_properties_typeProperties_tenant": {
+						"value": "[parameters('magar_linked_service_2_properties_typeProperties_tenant')]"
+					},
+					"magar_linked_service_2_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('magar_linked_service_2_properties_typeProperties_servicePrincipalId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

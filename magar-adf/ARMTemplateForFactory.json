@@ -1,0 +1,351 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "magar-adf"
+		},
+		"magar_linked_service_servicePrincipalCredential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalCredential' of 'magar_linked_service'"
+		},
+		"magar_linked_service_2_servicePrincipalCredential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalCredential' of 'magar_linked_service_2'"
+		},
+		"magar_linked_service_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"magar_linked_service_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "93caa577-dd6f-42b2-be63-04c899560742"
+		},
+		"magar_linked_service_2_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"magar_linked_service_2_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "93caa577-dd6f-42b2-be63-04c899560742"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/fuzzy join pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "fuzzy join flow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"orders": {},
+									"assets": {},
+									"sink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-12-13T16:11:33Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/fuzzy join flow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/assets_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "magar_linked_service_2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "LakehouseTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "long"
+					},
+					{
+						"name": "uuid",
+						"type": "string"
+					},
+					{
+						"name": "assetName",
+						"type": "string"
+					},
+					{
+						"name": "assetIndex",
+						"type": "long"
+					},
+					{
+						"name": "assetId",
+						"type": "string"
+					},
+					{
+						"name": "hierarchyPath",
+						"type": "string"
+					}
+				],
+				"typeProperties": {
+					"table": "assets"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/magar_linked_service_2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fuzzy_join_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "magar_linked_service_2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "LakehouseTable",
+				"schema": [],
+				"typeProperties": {
+					"table": "fuzzy_join"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/magar_linked_service_2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "magar_linked_service_2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "LakehouseTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "long"
+					},
+					{
+						"name": "orderId",
+						"type": "string"
+					},
+					{
+						"name": "orderItemName",
+						"type": "string"
+					},
+					{
+						"name": "orderItemFuzzyName",
+						"type": "string"
+					}
+				],
+				"typeProperties": {
+					"table": "orders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/magar_linked_service_2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/orders_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "magar_linked_service_2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "LakehouseTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "long"
+					},
+					{
+						"name": "orderId",
+						"type": "string"
+					},
+					{
+						"name": "orderItem",
+						"type": "string"
+					}
+				],
+				"typeProperties": {
+					"table": "orders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/magar_linked_service_2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/magar_linked_service')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Lakehouse",
+				"typeProperties": {
+					"workspaceId": "f1417811-f601-4770-860b-d7b67af31450",
+					"artifactId": "f2a7d9a5-4775-46ed-b375-928f9b1dc415",
+					"tenant": "[parameters('magar_linked_service_properties_typeProperties_tenant')]",
+					"servicePrincipalId": "[parameters('magar_linked_service_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalCredentialType": "ServicePrincipalKey",
+					"servicePrincipalCredential": {
+						"type": "SecureString",
+						"value": "[parameters('magar_linked_service_servicePrincipalCredential')]"
+					},
+					"fabricEnvironment": "MSIT"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/magar_linked_service_2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Lakehouse",
+				"typeProperties": {
+					"workspaceId": "752ae9dd-c5f9-4fc2-9509-180fef3a8ff2",
+					"artifactId": "fd6372f5-f727-4d6c-bca4-3f368f7454d9",
+					"tenant": "[parameters('magar_linked_service_2_properties_typeProperties_tenant')]",
+					"servicePrincipalId": "[parameters('magar_linked_service_2_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalCredentialType": "ServicePrincipalKey",
+					"servicePrincipalCredential": {
+						"type": "SecureString",
+						"value": "[parameters('magar_linked_service_2_servicePrincipalCredential')]"
+					},
+					"fabricEnvironment": "MSIT"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/fuzzy join flow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "orders",
+								"type": "DatasetReference"
+							},
+							"name": "orders",
+							"description": "left hand side table"
+						},
+						{
+							"dataset": {
+								"referenceName": "assets_table",
+								"type": "DatasetReference"
+							},
+							"name": "assets",
+							"description": "right hand side dataset"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "fuzzy_join_table",
+								"type": "DatasetReference"
+							},
+							"name": "sink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          orderId as string,",
+						"          orderItemName as string,",
+						"          orderItemFuzzyName as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false) ~> orders",
+						"source(output(",
+						"          id as string,",
+						"          uuid as string,",
+						"          assetName as string,",
+						"          assetIndex as string,",
+						"          assetId as string,",
+						"          hierarchyPath as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false) ~> assets",
+						"orders, assets join(fuzzyCompare(orderItemName, assetName, 80.00),",
+						"     joinType:'left',",
+						"     matchType:'fuzzy',",
+						"     ignoreSpaces: true,",
+						"     scoreColumn:'similarityScore',",
+						"     broadcast: 'off')~> join",
+						"join sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     optimizedWrite: false,",
+						"     mergeSchema: false,",
+						"     autoCompact: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/orders')]",
+				"[concat(variables('factoryId'), '/datasets/assets_table')]",
+				"[concat(variables('factoryId'), '/datasets/fuzzy_join_table')]"
+			]
+		}
+	]
+}
