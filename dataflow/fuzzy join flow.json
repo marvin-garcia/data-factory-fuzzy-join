@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "fuzzy join flow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -9,7 +9,7 @@
 						"referenceName": "orders_table",
 						"type": "DatasetReference"
 					},
-					"name": "LHS",
+					"name": "orders",
 					"description": "left hand side table"
 				},
 				{
@@ -42,7 +42,7 @@
 				"          orderItem as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> LHS",
+				"     validateSchema: false) ~> orders",
 				"source(output(",
 				"          id as string,",
 				"          uuid as string,",
@@ -53,7 +53,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false) ~> RHS",
-				"LHS, RHS join(fuzzyCompare(orderItem, assetId, 80.00),",
+				"orders, RHS join(fuzzyCompare(orderItem, assetId, 80.00),",
 				"     joinType:'left',",
 				"     matchType:'fuzzy',",
 				"     ignoreSpaces: false,",
