@@ -5,6 +5,10 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "orders",
+						"type": "DatasetReference"
+					},
 					"name": "orders",
 					"description": "left hand side table"
 				},
@@ -32,7 +36,13 @@
 				}
 			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          id as string,",
+				"          orderId as string,",
+				"          orderItemName as string,",
+				"          orderItemFuzzyName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false) ~> orders",
 				"source(output(",
 				"          id as string,",
@@ -44,10 +54,11 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false) ~> assets",
-				"orders, assets join(fuzzyCompare(orderItem, assetId, 80.00),",
+				"orders, assets join(fuzzyCompare(orderItemName, assetName, 80.00),",
 				"     joinType:'left',",
 				"     matchType:'fuzzy',",
-				"     ignoreSpaces: false,",
+				"     ignoreSpaces: true,",
+				"     scoreColumn:'similarityScor',",
 				"     broadcast: 'off')~> join",
 				"join sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",

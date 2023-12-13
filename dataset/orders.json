@@ -1,0 +1,32 @@
+{
+	"name": "orders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "magar_linked_service_2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "LakehouseTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "long"
+			},
+			{
+				"name": "orderId",
+				"type": "string"
+			},
+			{
+				"name": "orderItemName",
+				"type": "string"
+			},
+			{
+				"name": "orderItemFuzzyName",
+				"type": "string"
+			}
+		],
+		"typeProperties": {
+			"table": "orders"
+		}
+	}
+}
