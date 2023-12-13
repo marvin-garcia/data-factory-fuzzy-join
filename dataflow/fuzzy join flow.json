@@ -27,7 +27,7 @@
 						"referenceName": "fuzzy_join_table",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink"
 				}
 			],
 			"transformations": [
@@ -58,7 +58,7 @@
 				"     joinType:'left',",
 				"     matchType:'fuzzy',",
 				"     ignoreSpaces: true,",
-				"     scoreColumn:'similarityScor',",
+				"     scoreColumn:'similarityScore',",
 				"     broadcast: 'off')~> join",
 				"join sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -70,7 +70,7 @@
 				"     mergeSchema: false,",
 				"     autoCompact: false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> sink"
 			]
 		}
 	}
