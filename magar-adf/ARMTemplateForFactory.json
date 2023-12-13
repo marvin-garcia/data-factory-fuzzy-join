@@ -43,7 +43,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Data flow1",
+						"name": "fuzzy join flow",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
