@@ -321,7 +321,7 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false) ~> assets",
-						"orders, assets join(fuzzyCompare(orderItemName, assetName, 80.00),",
+						"orders, assets join(fuzzyCompare(orderItemFuzzyName, assetId, 60.00),",
 						"     joinType:'left',",
 						"     matchType:'fuzzy',",
 						"     ignoreSpaces: true,",
