@@ -1,0 +1,75 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "orders_table",
+						"type": "DatasetReference"
+					},
+					"name": "LHS",
+					"description": "left hand side table"
+				},
+				{
+					"dataset": {
+						"referenceName": "assets_table",
+						"type": "DatasetReference"
+					},
+					"name": "RHS",
+					"description": "right hand side dataset"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "fuzzy_join_table",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          orderId as string,",
+				"          orderItem as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false) ~> LHS",
+				"source(output(",
+				"          id as string,",
+				"          uuid as string,",
+				"          assetName as string,",
+				"          assetIndex as string,",
+				"          assetId as string,",
+				"          hierarchyPath as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false) ~> RHS",
+				"LHS, RHS join(fuzzyCompare(orderItem, assetId, 80.00),",
+				"     joinType:'left',",
+				"     matchType:'fuzzy',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'off')~> join",
+				"join sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     optimizedWrite: false,",
+				"     mergeSchema: false,",
+				"     autoCompact: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"name": "magar-adf",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7bbbe66d-7c45-45fe-8cd0-baab4618780a",
+		"tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+	}
+}
