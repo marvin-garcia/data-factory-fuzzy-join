@@ -55,7 +55,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false) ~> assets",
 				"orders, assets join(fuzzyCompare(orderItemFuzzyName, assetId, 60.00),",
-				"     joinType:'left',",
+				"     joinType:'inner',",
 				"     matchType:'fuzzy',",
 				"     ignoreSpaces: true,",
 				"     scoreColumn:'similarityScore',",
